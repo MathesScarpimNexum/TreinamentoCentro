@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre-1.8"/>
 	<classpathentry kind="lib" path="libs/bpm/commons-beanutils-1.4.1.jar"/>
 	<classpathentry kind="lib" path="libs/bpm/commons-collections-3.2.1-1.0.0.jar"/>
 	<classpathentry kind="lib" path="libs/bpm/commons-collections4-4.4.jar"/>
@@ -76,6 +77,5 @@
 	<classpathentry kind="lib" path="libs/lecom/RoboWF-1.3.jar"/>
 	<classpathentry kind="lib" path="libs/lecom/RotasBPM_v8.jar"/>
 	<classpathentry kind="lib" path="libs/lecom/WFMail-1.4.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
