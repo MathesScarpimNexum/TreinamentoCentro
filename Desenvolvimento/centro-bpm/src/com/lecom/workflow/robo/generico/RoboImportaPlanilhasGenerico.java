@@ -57,7 +57,7 @@ public class RoboImportaPlanilhasGenerico implements WebServices {
 
 		logger.info("============ INICIO RoboImportaPlanilhasGenerico ============");
 
-		try (Connection conAux = DBUtils.getConnection("baseAux")) {
+		try (Connection conAux = DBUtils.getConnection("aux_act")) {// trocar base
 
 			parametros = Funcoes.getParametrosIntegracao(configpath + getClass().getSimpleName());
 

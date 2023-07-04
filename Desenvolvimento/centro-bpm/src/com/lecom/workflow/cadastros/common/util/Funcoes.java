@@ -27,14 +27,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.lecom.workflow.robo.satelite.WFMail;
 
 import br.com.lecom.workflow.email.EmailMessage;
 
 /**
- * Classe responsavel por agregar os métodos de tratamentos e formatações comuns
+ * Classe responsavel por agregar os mï¿½todos de tratamentos e formataï¿½ï¿½es comuns
  * a todo o projeto
  * 
  * @author TODOS
@@ -43,7 +44,7 @@ import br.com.lecom.workflow.email.EmailMessage;
  */
 
 public class Funcoes {
-	private static final Logger logger = Logger.getLogger(Funcoes.class);
+	private static final Logger logger = LoggerFactory.getLogger(Funcoes.class);
 
 	public static void closeConnection(Connection connection, Logger logger) {
 
@@ -56,7 +57,7 @@ public class Funcoes {
 
 		} catch (Exception e) {
 
-			logger.error("Erro ao tentar fechar conexão Workflow!", e);
+			logger.error("Erro ao tentar fechar conexï¿½o Workflow!", e);
 
 		} finally {
 
@@ -103,7 +104,7 @@ public class Funcoes {
 	 * <p>
 	 * Criptografa ou Descriptografa uma string.
 	 * </p>
-	 * Obs: Função legado. não utilizar
+	 * Obs: Funï¿½ï¿½o legado. nï¿½o utilizar
 	 * 
 	 * @deprecated
 	 * @author Valter Leite
@@ -239,7 +240,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Funcao que retorna uma String com espaços a Esquerda
+	 * Funcao que retorna uma String com espaï¿½os a Esquerda
 	 * 
 	 * @param valor
 	 * @param casas
@@ -374,7 +375,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Metodo que busca os dados do Fluxo de Parâmetro
+	 * Metodo que busca os dados do Fluxo de Parï¿½metro
 	 * 
 	 * @param String     nomeTabelaParam
 	 * @param String     nomeCampo
@@ -532,18 +533,18 @@ public class Funcoes {
 
 
 	/**
-	 * Método que resgata os Dados do Usuario - Via CódUsuário WF
+	 * Mï¿½todo que resgata os Dados do Usuario - Via Cï¿½dUsuï¿½rio WF
 	 * 
-	 * @return ret[0]=> Código do Usuario <br>
+	 * @return ret[0]=> Cï¿½digo do Usuario <br>
 	 *         ret[1]=> Nome do Usuario <br>
 	 *         ret[2]=> Login do Usuario <br>
 	 *         ret[3]=> Email do Usuario <br>
-	 *         ret[4]=> Código Líder <br>
-	 *         ret[5]=> Código Usuário Perfil <br>
+	 *         ret[4]=> Cï¿½digo Lï¿½der <br>
+	 *         ret[5]=> Cï¿½digo Usuï¿½rio Perfil <br>
 	 *         ret[6]=> DES_CAMPO_INTEGRACAO1 = AN8 JDE <br>
 	 *         ret[7]=> DES_CAMPO_INTEGRACAO2 = Matricula Senior <br>
 	 *         ret[8]=> DES_CAMPO_INTEGRACAO3 = ? <br>
-	 *         ret[9]=> Código do depto <br>
+	 *         ret[9]=> Cï¿½digo do depto <br>
 	 *         ret[10]=> Nome do depto <br>
 	 */
 	public static String[] getDadosUsuario(Integer codUsuarioWF, String desLoginWF, Integer codUsuarioLiderWF,
@@ -625,7 +626,7 @@ public class Funcoes {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("[Erro ao buscar dados do Usuário]: ", e);
+			logger.error("[Erro ao buscar dados do Usuï¿½rio]: ", e);
 
 		} finally {
 
@@ -644,7 +645,7 @@ public class Funcoes {
 	}
 
 	/*
-	 * * * * * * * Função calcula diferença entre 2 horários, no formato HH:MM, em
+	 * * * * * * * Funï¿½ï¿½o calcula diferenï¿½a entre 2 horï¿½rios, no formato HH:MM, em
 	 * caso de tempo negativo retorno vazio Ex : Hora Inicio = 08:00 Hora Fim =
 	 * 09:00 Retorno = 01:00 * * * * *
 	 */
@@ -676,7 +677,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Recupera o e-mail informado no cadastro de parâmetros
+	 * Recupera o e-mail informado no cadastro de parï¿½metros
 	 * 
 	 * @return DES_FROM
 	 */
@@ -730,8 +731,8 @@ public class Funcoes {
 	}
 
 	/**
-	 * Pega E-Mail definido para ser usado no modo de testes, para cada formulário e
-	 * versão necessários
+	 * Pega E-Mail definido para ser usado no modo de testes, para cada formulï¿½rio e
+	 * versï¿½o necessï¿½rios
 	 * 
 	 * @param Connection cnWF
 	 * @param Integer    codForm
@@ -772,7 +773,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Metodo que lê arquivo properties com parametros e retorna um mapa.
+	 * Metodo que lï¿½ arquivo properties com parametros e retorna um mapa.
 	 * 
 	 * @param nomeArquivo
 	 * @return
@@ -917,10 +918,10 @@ public class Funcoes {
 	}
 
 	/**
-	 * Função que retorna o diretório base do Workflow Pode ser utilizado para a
-	 * criação de arquivos (para impressão, relatórios, etc.)
+	 * Funï¿½ï¿½o que retorna o diretï¿½rio base do Workflow Pode ser utilizado para a
+	 * criaï¿½ï¿½o de arquivos (para impressï¿½o, relatï¿½rios, etc.)
 	 * 
-	 * @return diretório base do Workflow (no tomcat, [tomcat]/webapps/workflow/)
+	 * @return diretï¿½rio base do Workflow (no tomcat, [tomcat]/webapps/workflow/)
 	 */
 	public static String getWFRootDir() {
 		String retorno = Funcoes.class.getClassLoader().getResource("").getPath(); // classes
@@ -974,7 +975,7 @@ public class Funcoes {
 	}
 
 	/*
-	 * blocoParalelo, caso "0" serve para 2 possibilidades ( 1 - não há separação de
+	 * blocoParalelo, caso "0" serve para 2 possibilidades ( 1 - nï¿½o hï¿½ separaï¿½ï¿½o de
 	 * grupos paralelos, 2 - Guarda os dados das etapas que precedem o paralelo e da
 	 * concentradora para frente )
 	 */
@@ -994,7 +995,7 @@ public class Funcoes {
 	}
 
 	/*
-	 * blocoParalelo, caso "0" serve para 2 possibilidades ( 1 - não há separação de
+	 * blocoParalelo, caso "0" serve para 2 possibilidades ( 1 - nï¿½o hï¿½ separaï¿½ï¿½o de
 	 * grupos paralelos, 2 - Guarda os dados das etapas que precedem o paralelo e da
 	 * concentradora para frente )
 	 */
@@ -1063,8 +1064,8 @@ public class Funcoes {
 				// Funcoes.closeStatement(pstInsertUpdateHist, null, logger);
 			}
 
-			// Grava a Etapa e Ciclo que foi atualizado o historico, como validação para que
-			// não seja duplicada a Observação no processo.
+			// Grava a Etapa e Ciclo que foi atualizado o historico, como validaï¿½ï¿½o para que
+			// nï¿½o seja duplicada a Observaï¿½ï¿½o no processo.
 			StringBuilder insEtapaCiclo = new StringBuilder();
 			insEtapaCiclo.append(" INSERT INTO LEC_HIST_ETAPA_CICLO(COD_PROCESSO, COD_ETAPA, COD_CICLO) ");
 			insEtapaCiclo.append(" VALUES (?,?,?) ");
@@ -1090,8 +1091,8 @@ public class Funcoes {
 	}
 
 	/**
-	 * Funcao que retorna uma string preenchida com a string especificada à
-	 * esquerda, com tamanho de acordo com o parâmetro informado.
+	 * Funcao que retorna uma string preenchida com a string especificada ï¿½
+	 * esquerda, com tamanho de acordo com o parï¿½metro informado.
 	 * 
 	 * @param source
 	 * @param filler
@@ -1239,12 +1240,12 @@ public class Funcoes {
 	}
 
 	/**
-	 * Retorna "selected" caso as informações forem iguais
+	 * Retorna "selected" caso as informaï¿½ï¿½es forem iguais
 	 * 
 	 * @author Carlos Henrique Leda
-	 * @param valor1 1º valor a ser comparado
-	 * @param valor2 2º valor a ser comparado
-	 * @return (String) String decorrente da comparação
+	 * @param valor1 1ï¿½ valor a ser comparado
+	 * @param valor2 2ï¿½ valor a ser comparado
+	 * @return (String) String decorrente da comparaï¿½ï¿½o
 	 */
 	public static String selecionado(String valor1, String valor2) {
 
@@ -1262,7 +1263,7 @@ public class Funcoes {
 	}
 
 	/*
-	 * * * * * * * Função soma 2 quantidades de horas, no formato HH:MM Ex : hrA =
+	 * * * * * * * Funï¿½ï¿½o soma 2 quantidades de horas, no formato HH:MM Ex : hrA =
 	 * 01:00 hrB = 02:00 Retorno = 03:00 * * * * *
 	 */
 	public static String somaHoras(String hrA, String hrB, boolean zerarHora) {
@@ -1297,7 +1298,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Método que resgata os Dados do Iniciador do Processo
+	 * Mï¿½todo que resgata os Dados do Iniciador do Processo
 	 * 
 	 * @return ret[0]=> Nome do Iniciador <br>
 	 *         ret[1]=> Login do Iniciador <br>
@@ -1348,7 +1349,7 @@ public class Funcoes {
 		case 2:
 			return "Segunda-feira";
 		case 3:
-			return "Terça-feira";
+			return "Terï¿½a-feira";
 		case 4:
 			return "Quarta-feira";
 		case 5:
@@ -1361,7 +1362,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Cria arquivo contendo texto passado como parâmetro.
+	 * Cria arquivo contendo texto passado como parï¿½metro.
 	 * 
 	 * @param filename
 	 * @param text
@@ -1398,7 +1399,7 @@ public class Funcoes {
 
 	/**
 	 * Funcao que retorna um numero inteiro passado como parametro como uma string
-	 * no formato "0#" com zeros à esquerda, com tamanho de acordo com o parâmetro
+	 * no formato "0#" com zeros ï¿½ esquerda, com tamanho de acordo com o parï¿½metro
 	 * informado.
 	 * 
 	 * @param numero
@@ -1456,7 +1457,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Verifica se o processo execurado está no modo de testes ou não
+	 * Verifica se o processo execurado estï¿½ no modo de testes ou nï¿½o
 	 * 
 	 * @param Connection cnWF
 	 * @param Integer    codProcesso
@@ -1500,12 +1501,12 @@ public class Funcoes {
 	}
 
 	/**
-	 * Verifica se a aplicação externa executada está no modo de testes ou não
+	 * Verifica se a aplicaï¿½ï¿½o externa executada estï¿½ no modo de testes ou nï¿½o
 	 * 
 	 * @param Connection cnWF
-	 * @param String     url ( parte final da URL da aplicação Externa, pois o
-	 *                   começo será sempre igual, com o endereço da aplicação )
-	 * @return String S / N ( onde S = Sim, N = Não ( default ) )
+	 * @param String     url ( parte final da URL da aplicaï¿½ï¿½o Externa, pois o
+	 *                   comeï¿½o serï¿½ sempre igual, com o endereï¿½o da aplicaï¿½ï¿½o )
+	 * @return String S / N ( onde S = Sim, N = Nï¿½o ( default ) )
 	 */
 	public static String isModoTesteApp(Connection cnWF, String url) {
 
@@ -1513,7 +1514,7 @@ public class Funcoes {
 
 		try {
 
-			// VERIFICA SE A APLICAÇÃO EXTERNA ESTÁ NO MODO DE TESTES
+			// VERIFICA SE A APLICAï¿½ï¿½O EXTERNA ESTï¿½ NO MODO DE TESTES
 			StringBuilder sSQL = new StringBuilder();
 			sSQL.append(" SELECT IDE_BETA_TESTE ");
 			sSQL.append("	FROM APLICACAO_EXTERNA ");
@@ -1543,8 +1544,8 @@ public class Funcoes {
 	}
 
 	/**
-	 * Pega E-Mail definido para ser usado no modo de testes, para cada formulário e
-	 * versão necessários
+	 * Pega E-Mail definido para ser usado no modo de testes, para cada formulï¿½rio e
+	 * versï¿½o necessï¿½rios
 	 * 
 	 * @param Connection cnWF
 	 * @param Integer    codForm
@@ -1612,7 +1613,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Pega a exceção gerada e retorna em formato String, para ser colocada no log.
+	 * Pega a exceï¿½ï¿½o gerada e retorna em formato String, para ser colocada no log.
 	 * 
 	 * @param e
 	 * @return
@@ -1628,7 +1629,7 @@ public class Funcoes {
 	}
 
 	/**
-	 * Este método garante a flexibilidade da utilização da múltiplas base de dados
+	 * Este mï¿½todo garante a flexibilidade da utilizaï¿½ï¿½o da mï¿½ltiplas base de dados
 	 * 
 	 * @param nomeBanco - Nome do banco ao qual se deseja executar a procedure
 	 * @return a chamada inicial a uma procedure no banco de dados utilizado
@@ -1688,7 +1689,7 @@ public class Funcoes {
 	}
 
 	/*
-	 * Retorna o nome do Mês do Ano com base no código do mesmo
+	 * Retorna o nome do Mï¿½s do Ano com base no cï¿½digo do mesmo
 	 */
 	public static String nomeMes(int month) {
 		String monthString = "";
@@ -1701,7 +1702,7 @@ public class Funcoes {
 			monthString = "Fevereiro";
 			break;
 		case 2:
-			monthString = "Março";
+			monthString = "Marï¿½o";
 			break;
 		case 3:
 			monthString = "Abril";
@@ -2326,7 +2327,7 @@ public class Funcoes {
 
 
 	/**
-	 * Obtem o código da versão ativa do formulário a partir do código do formulário
+	 * Obtem o cï¿½digo da versï¿½o ativa do formulï¿½rio a partir do cï¿½digo do formulï¿½rio
 	 * @param connection
 	 * @param codForm
 	 * @return
@@ -2354,7 +2355,7 @@ public class Funcoes {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("ERRO AO CONSULTAR A VERSÃO DO FORMULARIO: ", e);
+			logger.error("ERRO AO CONSULTAR A VERSï¿½O DO FORMULARIO: ", e);
 			throw e;
 		}
 
@@ -2406,7 +2407,7 @@ public class Funcoes {
 
 
 	/**
-	 * Obtem o código da ciclo da etapa a partir do código da etapa e processo
+	 * Obtem o cï¿½digo da ciclo da etapa a partir do cï¿½digo da etapa e processo
 	 * @param connection
 	 * @param codProcesso
 	 * @param codEtapa
