@@ -14,7 +14,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.lecom.tecnologia.db.DBUtils;
 import com.lecom.workflow.robo.satelite.WFMail;
@@ -26,7 +27,7 @@ import br.com.lecom.atos.servicos.annotation.Version;
 import br.com.lecom.workflow.email.EmailMessage;
 
 /**
- * Integração para disparo de e-mail generica utilizando json do campo do
+ * Integraï¿½ï¿½o para disparo de e-mail generica utilizando json do campo do
  * processo.
  * 
  * -Dependencia Criacao do campo AUX_EMAIL no processo uso do json no seguinte
@@ -70,15 +71,15 @@ import br.com.lecom.workflow.email.EmailMessage;
  * 
  * 
  * 
- * Descrição dos atributos: grupos: Arrays com o nome dos grupos que os usuários
- * deverão receber e-mail. Neste caso o sistema irá identificar automaticamente
- * os e-mails de todos os usuários ativos no grupos email: endereços de e-mail
- * que deverão receber o email. Atenção é obrigatório o preenchimento do grupos
- * ou e-mails. assunto: assunto que será enviado no e-mail. camposFormulario: o
- * nome dos campos que deverão ser enviados no processo, é considerado aqui o
+ * Descriï¿½ï¿½o dos atributos: grupos: Arrays com o nome dos grupos que os usuï¿½rios
+ * deverï¿½o receber e-mail. Neste caso o sistema irï¿½ identificar automaticamente
+ * os e-mails de todos os usuï¿½rios ativos no grupos email: endereï¿½os de e-mail
+ * que deverï¿½o receber o email. Atenï¿½ï¿½o ï¿½ obrigatï¿½rio o preenchimento do grupos
+ * ou e-mails. assunto: assunto que serï¿½ enviado no e-mail. camposFormulario: o
+ * nome dos campos que deverï¿½o ser enviados no processo, ï¿½ considerado aqui o
  * valor do campo da etapa em andamento. templateHtml: html personalizado que
- * será encaminhado no e-mail. Atenção: caso o atributo templateHtml for
- * preenchido o atributo camposFormulario será desconsiderado.
+ * serï¿½ encaminhado no e-mail. Atenï¿½ï¿½o: caso o atributo templateHtml for
+ * preenchido o atributo camposFormulario serï¿½ desconsiderado.
  * 
  * @since 12/2021
  * @author Thiago.Costa
@@ -95,7 +96,7 @@ import br.com.lecom.workflow.email.EmailMessage;
 @Version({ 1, 0, 2 })
 public class DisparoEmail {
 
-	private static Logger logger = Logger.getLogger(DisparoEmail.class);
+	private static Logger logger = LoggerFactory.getLogger(DisparoEmail.class);
 
 	@Execution
 	public String start(IntegracaoVO integracaoVO) {
@@ -109,7 +110,7 @@ public class DisparoEmail {
 		String auxParamsEmail = nulo(camposFormulario.get("$AUX_EMAIL"), "");
 
 		if (auxParamsEmail.equals("")) {
-			return "0|Não há e-mail cadastrados para envio!";
+			return "0|Nï¿½o hï¿½ e-mail cadastrados para envio!";
 		}
 
 		try {
@@ -134,10 +135,10 @@ public class DisparoEmail {
 		int codForm = Integer.parseInt(integracaoVO.getCodForm());
 		String bodyEmail = null;
 		if (paramsEndEmailError(paramEmail)) {
-			return "99|Informe pelo menos um endereço de e-mail para continuar.";
+			return "99|Informe pelo menos um endereï¿½o de e-mail para continuar.";
 		}
 		if (paramsDadosEmailError(paramEmail)) {
-			return "99|Informe pelo menos um endereço de e-mail para continuar.";
+			return "99|Informe pelo menos um endereï¿½o de e-mail para continuar.";
 		}
 
 		String from = integracaoVO.getDesFrom();
@@ -156,7 +157,7 @@ public class DisparoEmail {
 		logger.trace(listEmailEnvio.toString());
 		logger.trace(new String(new char[100]).replace("\0", "#"));
 
-		// Caso exista um template html será enviado o template
+		// Caso exista um template html serï¿½ enviado o template
 		if (paramEmail.containsKey("templateHtml") && !paramEmail.get("templateHtml").equals("")) {
 			bodyEmail = nulo(paramEmail.get("templateHtml"), "");
 		} else if (dadosEmail.containsKey("camposFormulario") && !dadosEmail.get("camposFormulario").equals("")) {
@@ -257,7 +258,7 @@ public class DisparoEmail {
 	}
 
 	/**
-	 * buscar o nome do modelo através do cod do processo.
+	 * buscar o nome do modelo atravï¿½s do cod do processo.
 	 * 
 	 * @param cnWF
 	 * @param logger
@@ -600,7 +601,7 @@ public class DisparoEmail {
 		return campos;
 	}
 	/**
-	 * merge endereços de e-mail
+	 * merge endereï¿½os de e-mail
 	 * 
 	 * @param arrEmails
 	 * @param emailUsuGrupos
@@ -619,7 +620,7 @@ public class DisparoEmail {
 	}
 
 	/**
-	 * Recupera o e-mail dos usuários pertencentes a um grupo
+	 * Recupera o e-mail dos usuï¿½rios pertencentes a um grupo
 	 * 
 	 * @param arrGrupos
 	 * @param con

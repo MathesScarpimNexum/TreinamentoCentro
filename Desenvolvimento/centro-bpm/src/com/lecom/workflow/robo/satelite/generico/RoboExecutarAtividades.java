@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.lecom.tecnologia.db.DBUtils;
 import com.lecom.workflow.cadastros.common.util.Funcoes;
@@ -35,10 +36,10 @@ import br.com.lecom.atos.servicos.annotation.RobotModule;
 import br.com.lecom.atos.servicos.annotation.Version;
 
 @RobotModule(value = "RoboExecutarAtividades")
-@Version({1,0,14})
+@Version({1,0,12})
 public class RoboExecutarAtividades implements WebServices {
 	
-	private static Logger logger = Logger.getLogger(RoboExecutarAtividades.class);
+	private static final Logger logger = LoggerFactory.getLogger(RoboExecutarAtividades.class);
 	private String configPath = Funcoes.getWFRootDir() + "/upload/cadastros/config/";
 	
 	private String accessToken530SSO;
@@ -46,7 +47,7 @@ public class RoboExecutarAtividades implements WebServices {
 	@Execution
 	public void AprovarEtapas() throws Exception{
 		
-		logger.info(">> Inicio RoboExecutarAtividades Genrico <<");
+		logger.info(">> Inicio RoboExecutarAtividades Gen�rico <<");
 		
 		try ( Connection cnLecom = DBUtils.getConnection("workflow") ) {
 			
@@ -65,25 +66,25 @@ public class RoboExecutarAtividades implements WebServices {
 			// Cria um Objeto LocalDate com a data atual ( Java 8 ).
 	        LocalDate dataAtual = LocalDate.now();
 
-			// Aprova etapas, em paralelo, definidas no propertie, paradas com o Rob
-			executarAtividadeConcentradora(cnLecom, false, parametros.get("aprovacoesParalelas").trim(), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", null, false);
+			// Aprova etapas, em paralelo, definidas no propertie, paradas com o Rob�
+			executarAtividadeConcentradora(cnLecom, false, parametros.get("aprovacoesParalelas"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", null, false);
 			
-			// Aprova etapas, definidas no propertie, paradas com o Rob
+			// Aprova etapas, definidas no propertie, paradas com o Rob�
 			executarAtividades(cnLecom, false, parametros.get("aprovacoes"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", null, false);
 			
-			// Rejeita etapas, definidas no propertie, paradas com o Rob
+			// Rejeita etapas, definidas no propertie, paradas com o Rob�
 			executarAtividades(cnLecom, false, parametros.get("rejeicoes"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", null, false);
 			
-			// Aprova etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com o Rob
+			// Aprova etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com o Rob�
 			executarAtividadesDataCampo(cnLecom, false, datAtual, parametros.get("aprovacoesDataCampo"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", null, false);
 			
-			// Rejeita etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com o Rob
+			// Rejeita etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com o Rob�
 			executarAtividadesDataCampo(cnLecom, false, datAtual, parametros.get("rejeicoesDataCampo"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", null, false);
 			
-			// Aprova atividades que o "prazo mximo", definido para ela, tenha excedido e que estejam paradas com o rob
+			// Aprova atividades que o "prazo m�ximo", definido para ela, tenha excedido e que estejam paradas com o rob�
 			executarAtividadesPrazoMaximoExcedido(cnLecom, false, datAtual, parametros.get("aprovacoesEtapasPrazoMaximoExcedido"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", null, false);
 			
-			// Rejeita atividades que o "prazo mximo", definido para ela, tenha excedido e que estejam paradas com o rob
+			// Rejeita atividades que o "prazo m�ximo", definido para ela, tenha excedido e que estejam paradas com o rob�
 			executarAtividadesPrazoMaximoExcedido(cnLecom, false, datAtual, parametros.get("rejeicoesEtapasPrazoMaximoExcedido"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", null, false);
 			
 			
@@ -93,52 +94,52 @@ public class RoboExecutarAtividades implements WebServices {
 			gerarAccessToken530SSO(cnLecom, loginUsuarioAutomatico, senhaUsuarioAutomatico, UrlSSo);
 			
 			logger.info("accessToken530SSO = "+accessToken530SSO);
-			// Caso no seja gerado o token no executa as chamadas aos servios.
+			// Caso n�o seja gerado o token n�o executa as chamadas aos servi�os.
 			if ( accessToken530SSO != null && !"".equalsIgnoreCase( accessToken530SSO ) ) {
 				
-				// Aprova etapas, em paralelo, definidas no propertie, paradas com o Rob
-				executarAtividadeConcentradora(cnLecom, true, parametros.get("aprovacoesFNConcentradora").trim(), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, false);
-				// Aprova etapas, em paralelo, definidas no propertie, paradas com Usurio Comum
-				executarAtividadeConcentradora(cnLecom, true, parametros.get("aprovacoesFNConcentradoraUC").trim(), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, true);
+				// Aprova etapas, em paralelo, definidas no propertie, paradas com o Rob�
+				executarAtividadeConcentradora(cnLecom, true, parametros.get("aprovacoesFNConcentradora"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, false);
+				// Aprova etapas, em paralelo, definidas no propertie, paradas com Usu�rio Comum
+				executarAtividadeConcentradora(cnLecom, true, parametros.get("aprovacoesFNConcentradoraUC"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, true);
 				
-				// Aprova etapas, em paralelo, definidas no propertie, paradas com o Rob
+				// Aprova etapas, em paralelo, definidas no propertie, paradas com o Rob�
 				executarAtividadeConcentradora(cnLecom, true, parametros.get("rejeicoesFNConcentradora"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", urlBPM, false);
-				// Aprova etapas, em paralelo, definidas no propertie, paradas com Usurio Comum
+				// Aprova etapas, em paralelo, definidas no propertie, paradas com Usu�rio Comum
 				executarAtividadeConcentradora(cnLecom, true, parametros.get("rejeicoesFNConcentradoraUC"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", urlBPM, true);
 				
-				// Aprova etapas, definidas no propertie, paradas com o Rob
+				// Aprova etapas, definidas no propertie, paradas com o Rob�
 				executarAtividades(cnLecom, true, parametros.get("aprovacoesFN"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, false);
-				// Aprova etapas, definidas no propertie, paradas com Usurio Comum
+				// Aprova etapas, definidas no propertie, paradas com Usu�rio Comum
 				executarAtividades(cnLecom, true, parametros.get("aprovacoesFNUC"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, true);
 				
-				// Rejeita etapas, definidas no propertie, paradas com o Rob
+				// Rejeita etapas, definidas no propertie, paradas com o Rob�
 				executarAtividades(cnLecom, true, parametros.get("rejeicoesFN"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", urlBPM, false);
-				// Rejeita etapas, definidas no propertie, paradas com Usurio Comum
+				// Rejeita etapas, definidas no propertie, paradas com Usu�rio Comum
 				executarAtividades(cnLecom, true, parametros.get("rejeicoesFNUC"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", urlBPM, true);
 				
-				// Aprova etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com o Rob
+				// Aprova etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com o Rob�
 				executarAtividadesDataCampo(cnLecom, true, datAtual, parametros.get("aprovacoesFNDataCampo"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, false);
-				// Aprova etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com Usurio Comum
+				// Aprova etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com Usu�rio Comum
 				executarAtividadesDataCampo(cnLecom, true, datAtual, parametros.get("aprovacoesFNDataCampoUC"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, true);
 				
-				// Rejeita etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com o Rob
+				// Rejeita etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com o Rob�
 				executarAtividadesDataCampo(cnLecom, true, datAtual, parametros.get("rejeicoesFNDataCampo"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", urlBPM, false);
-				// Rejeita etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com Usurio Comum
+				// Rejeita etapas em uma data determinada por um campo, definido no propertie, que estejam paradas com Usu�rio Comum
 				executarAtividadesDataCampo(cnLecom, true, datAtual, parametros.get("rejeicoesFNDataCampoUC"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", urlBPM, true);
 								
-				// Aprova atividades que o "prazo mximo", definido para ela, tenha excedido e que estejam paradas com o rob
+				// Aprova atividades que o "prazo m�ximo", definido para ela, tenha excedido e que estejam paradas com o rob�
 				executarAtividadesPrazoMaximoExcedido(cnLecom, true, datAtual, parametros.get("aprovacoesFNEtapasPrazoMaximoExcedido"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, false);
-				// Aprova atividades que o "prazo mximo", definido para ela, tenha excedido e que estejam paradas com Usurio Comum
+				// Aprova atividades que o "prazo m�ximo", definido para ela, tenha excedido e que estejam paradas com Usu�rio Comum
 				executarAtividadesPrazoMaximoExcedido(cnLecom, true, datAtual, parametros.get("aprovacoesFNEtapasPrazoMaximoExcedidoUC"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "P", urlBPM, true);
 				
-				// Rejeita atividades que o "prazo mximo", definido para ela, tenha excedido e que estejam paradas com o rob
+				// Rejeita atividades que o "prazo m�ximo", definido para ela, tenha excedido e que estejam paradas com o rob�
 				executarAtividadesPrazoMaximoExcedido(cnLecom, true, datAtual, parametros.get("rejeicoesFNEtapasPrazoMaximoExcedido"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", urlBPM, false);
-				// Rejeita atividades que o "prazo mximo", definido para ela, tenha excedido e que estejam paradas com Usurio Comum
+				// Rejeita atividades que o "prazo m�ximo", definido para ela, tenha excedido e que estejam paradas com Usu�rio Comum
 				executarAtividadesPrazoMaximoExcedido(cnLecom, true, datAtual, parametros.get("rejeicoesFNEtapasPrazoMaximoExcedidoUC"), codUsuarioAutomatico, loginUsuarioAutomatico, senhaUsuarioAutomatico, "R", urlBPM, true);
 				
-				// Cancela processos que esto na atividade inicial, ciclo 1, parados a mais de x dias
+				// Cancela processos que est�o na atividade inicial, ciclo 1, parados a mais de x dias
 				cancelaProcessoNaoEnviado(cnLecom, dataAtual, parametros.get("cancelaFNProcessoNaoEnviado"), codUsuarioAutomatico, urlBPM, false);
-				// Cancela processos que esto na atividade inicial, ciclo 1, parados a mais de x dias, com Usurio Comum
+				// Cancela processos que est�o na atividade inicial, ciclo 1, parados a mais de x dias, com Usu�rio Comum
 				cancelaProcessoNaoEnviado(cnLecom, dataAtual, parametros.get("cancelaFNProcessoNaoEnviadoUC"), codUsuarioAutomatico, urlBPM, true);
 			}
 			
@@ -146,7 +147,7 @@ public class RoboExecutarAtividades implements WebServices {
 			logger.error("[ ERRO ] : ", e);
 		}
 		
-		logger.info(">> Fim RoboExecutarAtividades Genrico <<");
+		logger.info(">> Fim RoboExecutarAtividades Gen�rico <<");
 	}
 	
 	// Executar atividades do form 5.20
@@ -173,17 +174,17 @@ public class RoboExecutarAtividades implements WebServices {
 	}
 	
 	/**
-	 * Metodo que chama o servio de execuo de atividades do form novo 5.30
-	 * @param String codProcessoExecutar - Obrigatrio
-	 * @param String codAtividadeExecutar - Obrigatrio
-	 * @param String codCicloExecutar - Obrigatrio
-	 * @param String modoTeste - Obrigatrio
-	 * @param Map<String, String> camposValores - No Obrigatrio - Onde MAP deve conter nome do campo e valores
-	 * @param Map<String, List<Map<String, Object>>> gridValores - No Obrigatrio - Onde MAP deve conter o nome da grid e um LIST<MAP> que conter os nomes dos campos e valores
-	 * @param Integer codUsuarioAutomatico - Obrigatrio
-	 * @param String loginUsuarioAutomatico - Obrigatrio
-	 * @param String senhaUsuarioAutomatico - Obrigatrio
-	 * @param String paramAcaoAprovaRejeita - Obrigatrio - Onde P = Aprovar, R = Rejeitar
+	 * Metodo que chama o servi�o de execu��o de atividades do form novo 5.30
+	 * @param String codProcessoExecutar - Obrigat�rio
+	 * @param String codAtividadeExecutar - Obrigat�rio
+	 * @param String codCicloExecutar - Obrigat�rio
+	 * @param String modoTeste - Obrigat�rio
+	 * @param Map<String, String> camposValores - N�o Obrigat�rio - Onde MAP deve conter nome do campo e valores
+	 * @param Map<String, List<Map<String, Object>>> gridValores - N�o Obrigat�rio - Onde MAP deve conter o nome da grid e um LIST<MAP> que conter� os nomes dos campos e valores
+	 * @param Integer codUsuarioAutomatico - Obrigat�rio
+	 * @param String loginUsuarioAutomatico - Obrigat�rio
+	 * @param String senhaUsuarioAutomatico - Obrigat�rio
+	 * @param String paramAcaoAprovaRejeita - Obrigat�rio - Onde P = Aprovar, R = Rejeitar
 	 * @return String retornoAprovacao
 	 * @throws Exception
 	 */
@@ -261,14 +262,14 @@ public class RoboExecutarAtividades implements WebServices {
 	
 	
 	/*
-	 * Aprova etapas, em paralelo, definidas no propertie, paradas com o Rob
+	 * Aprova etapas, em paralelo, definidas no propertie, paradas com o Rob�
 	 */
 	private void executarAtividadeConcentradora( Connection cnLecom, boolean formNovo, String atividadesExecutar, Integer codUsuarioAutomatico, String loginUsuarioAutomatico, 
 												 String senhaUsuarioAutomatico, String paramAcaoAprovaRejeita, String urlBPM, boolean transferirRobo ) throws Exception{
 		
 		logger.info("INICIO executaEtapaConcentradora : " + atividadesExecutar);
 		
-		if(atividadesExecutar != null && !"".equals(atividadesExecutar) ){
+		if( !"".equals(atividadesExecutar) ){
 		
 			for (String atividadeExecut : atividadesExecutar.split(";")) {
 				
@@ -281,7 +282,7 @@ public class RoboExecutarAtividades implements WebServices {
 				
 				logger.info("PARALELO - Em analise - Form : " + codFormConcentradora + " / Etapa Concentradora : " + codEtapaConcentradora + " / Etapa Paralelismo : " + codEtapasParalelismo);
 	
-				// Consulta as etapas Concentradoras que ainda esto em aberto 
+				// Consulta as etapas Concentradoras que ainda est�o em aberto 
 				StringBuilder sqlConsultaAux1 = new StringBuilder();
 				sqlConsultaAux1.append(" 	 SELECT P.COD_FORM, PE.COD_PROCESSO, PE.COD_ETAPA, PE.COD_CICLO, P.IDE_BETA_TESTE ");
 				sqlConsultaAux1.append(" 	   FROM PROCESSO_ETAPA PE ");
@@ -306,7 +307,7 @@ public class RoboExecutarAtividades implements WebServices {
 				
 					while (rsConsultaAux1.next()) {
 						
-						// Consulta as etapas do Paralelismo que ainda esto em aberto
+						// Consulta as etapas do Paralelismo que ainda est�o em aberto
 						StringBuilder sqlConsultaAux2 = new StringBuilder();
 						sqlConsultaAux2.append(" 	 SELECT COUNT(P.COD_PROCESSO) QTD_ETAPAS_ABERTO ");
 						sqlConsultaAux2.append(" 	   FROM PROCESSO_ETAPA PE ");
@@ -359,7 +360,7 @@ public class RoboExecutarAtividades implements WebServices {
 	
 	
 	/*
-	 * Aprova/Rejeita etapas, definidas no propertie, paradas com o Rob
+	 * Aprova/Rejeita etapas, definidas no propertie, paradas com o Rob�
 	 */
 	private void executarAtividades( Connection cnLecom, boolean formNovo, String atividadesExecutar, Integer codUsuarioAutomatico, String loginUsuarioAutomatico, 
 									 String senhaUsuarioAutomatico, String paramAcaoAprovaRejeita, String urlBPM, boolean transferirRobo ) throws Exception{
@@ -457,7 +458,7 @@ public class RoboExecutarAtividades implements WebServices {
 //				Map<String, String> paramFormModelo = Funcoes.getParametrosIntegracao(configPath + String.format("modelo_%1$s.properties", codFormAnalise));
 //				String tableName = paramFormModelo.get("table_name");
 			
-				// Pega todos os processos que esto na etapa "Aguarda_data_modific" 
+				// Pega todos os processos que est�o na etapa "Aguarda_data_modific" 
 				StringBuilder sqlConsultaEtapas = new StringBuilder();
 				sqlConsultaEtapas.append(" 	   SELECT P.COD_FORM, PE.COD_PROCESSO, PE.COD_ETAPA, PE.COD_CICLO, P.IDE_BETA_TESTE, F.");
 				sqlConsultaEtapas.append(nomeCampoAnalise);
@@ -499,7 +500,7 @@ public class RoboExecutarAtividades implements WebServices {
 	//					logger.info("codEtapa : " + codEtapa);
 	//					logger.info("datReferencia : " + datReferencia);
 						
-						// Se a data Referencia for igual ou inferior a data atual, ento executa
+						// Se a data Referencia for igual ou inferior a data atual, ent�o executa
 						if (datReferencia.compareTo(datAtual) <= 0) {
 							
 							if ( transferirRobo ) {
@@ -526,7 +527,7 @@ public class RoboExecutarAtividades implements WebServices {
 	
 	
 	/*
-	 * Aprova/Rejeita atividades cujo "prazo mximo", definido para ela, tenha excedido
+	 * Aprova/Rejeita atividades cujo "prazo m�ximo", definido para ela, tenha excedido
 	 */
 	private void executarAtividadesPrazoMaximoExcedido( Connection cnLecom, boolean formNovo, Calendar datAtual, String paramProcExecutar, Integer codUsuarioAutomatico, 
 												   		String loginUsuarioAutomatico, String senhaUsuarioAutomatico, String paramAcaoAprovaRejeita, String urlBPM, boolean transferirRobo ) throws Exception{
@@ -541,7 +542,7 @@ public class RoboExecutarAtividades implements WebServices {
 				
 				String[] paramFormEtapa = paramProc.split("@");
 				
-				// <cod form>@<cod etapa>@<nome do campo onservaao>@<mensagem para registrar execuo automtica>;
+				// <cod form>@<cod etapa>@<nome do campo onserva�ao>@<mensagem para registrar execu��o autom�tica>;
 				Integer codFormAnalise = new Integer(paramFormEtapa[0]);
 				Integer codEtapaAnalise = new Integer(paramFormEtapa[1]);
 				String nomeCampoObservacao = "";
@@ -552,7 +553,7 @@ public class RoboExecutarAtividades implements WebServices {
 					mensagemExecAutomatica = paramFormEtapa[3];
 				}
 				
-				logger.info("APROVA ETAPAS PRAZO MAXIMO EXCEDIDO - Em analise - Form : " + codFormAnalise + " / Etapa : " + codEtapaAnalise + " / Campo Observao : " + nomeCampoObservacao + " / Mensagem : " + mensagemExecAutomatica);
+				logger.info("APROVA ETAPAS PRAZO MAXIMO EXCEDIDO - Em analise - Form : " + codFormAnalise + " / Etapa : " + codEtapaAnalise + " / Campo Observa��o : " + nomeCampoObservacao + " / Mensagem : " + mensagemExecAutomatica);
 	
 				StringBuilder sqlConsultaAtividades = new StringBuilder();
 				sqlConsultaAtividades.append(" 	   SELECT P.COD_FORM, PE.COD_PROCESSO, PE.COD_ETAPA, PE.COD_CICLO, E.COD_TIPO_ETAPA, PE.DAT_LIMITE, P.IDE_BETA_TESTE ");
@@ -588,18 +589,18 @@ public class RoboExecutarAtividades implements WebServices {
 						String modoTeste = rsConsultaEtapas.getString("IDE_BETA_TESTE");
 						Calendar datReferencia = DateToCalendar(rsConsultaEtapas.getDate("DAT_LIMITE"));
 						
-						// Se o tipo da etapa for 1 = Inicial, a aa precisa ser de cancelamento
+						// Se o tipo da etapa for 1 = Inicial, a a�a� precisa ser de cancelamento
 						Integer codTipoEtapa = rsConsultaEtapas.getInt("COD_TIPO_ETAPA");
 						if ( "R".equalsIgnoreCase(paramAcaoAprovaRejeita) && codTipoEtapa.compareTo(new Integer(1)) == 0 ){
 							paramAcaoAprovaRejeita = "C";
-							logger.info("nova ao : " + paramAcaoAprovaRejeita);
+							logger.info("nova a��o : " + paramAcaoAprovaRejeita);
 						}
 						
 						logger.info("codProcesso : " + codProcesso);
 						logger.info("codEtapa : " + codEtapa);
 						logger.info("datReferencia : " + datReferencia);
 						
-						// Se a data Referencia for igual ou inferior a data atual, ento executa
+						// Se a data Referencia for igual ou inferior a data atual, ent�o executa
 						if (datReferencia.compareTo(datAtual) <= 0) {
 							
 							if ( transferirRobo ) {
@@ -697,7 +698,7 @@ public class RoboExecutarAtividades implements WebServices {
 	}
 	
 	
-	// Insere o Usurio Robo na atividade para poder executa-la.
+	// Insere o Usu�rio Robo na atividade para poder executa-la.
 	private void inserirUsuarioEtapa (Connection cnLecom, Integer codProcesso, Integer codEtapa, Integer codCiclo, Integer codUsuario ) throws Exception {
 
 		logger.info("[=== INICIO inserirUsuarioEtapa ===]");
@@ -714,7 +715,7 @@ public class RoboExecutarAtividades implements WebServices {
 			pstInsert.setInt(4, codUsuario);
 
 			pstInsert.executeUpdate();
-			//cnLecom.commit();
+			cnLecom.commit();
 
 		} catch (Exception e) {
 			logger.error("[ERRO - inserirRoboEtapa]", e);
@@ -768,11 +769,11 @@ public class RoboExecutarAtividades implements WebServices {
 						LocalDateTime dataAbertura = LocalDateTime.parse( rsConsultaEtapas.getString("DAT_GRAVACAO") , DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
 						logger.info("dataAbertura : " + dataAbertura);
 						
-				        // Calcula a diferena de dias entre as duas datas ( Se a qtd vier negativa, quer dizer q a data Analisada  inferior a atual, se for positiva, a data analisada  superior a atual )
+				        // Calcula a diferen�a de dias entre as duas datas ( Se a qtd vier negativa, quer dizer q a data Analisada � inferior a atual, se for positiva, a data analisada � superior a atual )
 				        long difEmDiasDataAbertura = ChronoUnit.DAYS.between(dataAtual, dataAbertura);
 				        logger.info("codProcesso / difEmDiasDataAbertura : " + codProcesso + " / " + difEmDiasDataAbertura);
 						
-						// Se a data Referencia for igual ou inferior a data atual, ento executa
+						// Se a data Referencia for igual ou inferior a data atual, ent�o executa
 					    if( qtdDiasAguardar > difEmDiasDataAbertura ) {
 							
 					    	if ( transferirRobo ) {
@@ -795,7 +796,6 @@ public class RoboExecutarAtividades implements WebServices {
 		
 		logger.info("FIM cancelaProcessoNaoEnviado");
 	}
-	
 	
 	@Override
 	public List<WebServicesVO> getWebServices() {

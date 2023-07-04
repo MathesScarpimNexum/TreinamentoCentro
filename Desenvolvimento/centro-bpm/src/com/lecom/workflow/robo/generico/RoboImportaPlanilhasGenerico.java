@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -46,7 +47,7 @@ import br.com.lecom.atos.servicos.annotation.Version;
 @Version({ 1, 0, 1 })
 public class RoboImportaPlanilhasGenerico implements WebServices {
 
-	private static final Logger logger = Logger.getLogger(RoboImportaPlanilhasGenerico.class);
+	private static final Logger logger = LoggerFactory.getLogger(RoboImportaPlanilhasGenerico.class);
 	private static String configpath = Funcoes.getWFRootDir() + File.separator + "upload" + File.separator + "cadastros"
 			+ File.separator + "config" + File.separator;
 	Map<String, String> parametros = null;
