@@ -26,11 +26,12 @@ public class AnexosBPM {
 		
 //		
 		
-		String nome = "ANX_ANEXO";
-		String nomeAnexo= "nome_anx.pdf"; 
-		String nomeCriptografado = "a3ca26cf-d113-4480-ab9c-58df540ac058";
-		String codCampo = "22";
-		String codIdDocumento = "79050";
+		String nome = "ANX_TESTE";
+		String nomeAnexo= "Teste.docx"; 
+		String nomeCriptografado = "9c21489a-a5b9-4b9a-be69-111371210019";
+		String codCampo = "13";
+		String codIdDocumento = "29";
+		
 		
 		
 		
@@ -44,6 +45,7 @@ public class AnexosBPM {
 				alteraValorCampoSaida(integracaoVO, nomeAnexo + ":" + nomeCriptografado,nome);
 				
 			}
+			
 			
 			
 			

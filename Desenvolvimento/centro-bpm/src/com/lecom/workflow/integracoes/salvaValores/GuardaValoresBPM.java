@@ -19,8 +19,8 @@ import br.com.lecom.atos.servicos.annotation.Execution;
 import br.com.lecom.atos.servicos.annotation.IntegrationModule;
 import br.com.lecom.atos.servicos.annotation.Version;
 
-@IntegrationModule("GuardaValoresPatrocinio")
-@Version({2,0,0})
+@IntegrationModule("GuardaValoresBPM")
+@Version({1,0,0})
 public class GuardaValoresBPM {
     private static final Logger logger = LoggerFactory.getLogger(GuardaValoresBPM.class);
     @Execution
@@ -29,12 +29,13 @@ public class GuardaValoresBPM {
         {
             @SuppressWarnings("unchecked")
             Map<String,String> camposEtapa = integracaoVO.getMapCamposFormulario();
-            String cpf_cnpj = camposEtapa.get("$LT_CPF_CNPJ");
+            String nome = camposEtapa.get("$LT_NOME");
+            String email = camposEtapa.get("$LT_EMAIL");
 
 
 
             RetornaInformacoesBPM retornarDadosBaseBPM = new RetornaInformacoesBPM();
-           AddDadosTabela(retornarDadosBaseBPM,cpf_cnpj);
+           AddDadosTabela(retornarDadosBaseBPM,nome,email);
 
             logger.debug("Dados Adicionados na Tabela Patrocinio");
 
@@ -61,20 +62,21 @@ public class GuardaValoresBPM {
         }
       }
 
-    private static void AddDadosTabela(RetornaInformacoesBPM retornaDadosBaseBPM,String cpf_cnpj) throws Exception {
+    private static void AddDadosTabela(RetornaInformacoesBPM retornaDadosBaseBPM,String nome,String email) throws Exception {
 
 
         try (Connection con = DBUtils.getConnection("aux_act")) {
                     StringBuilder sql = new StringBuilder();
                     sql.append("INSERT INTO ");
-                    sql.append("tabela ");
+                    sql.append("dadosti ");
                     sql.append("VALUES");
-                    sql.append("(?);");
+                    sql.append("(?,?);");
                     logger.debug(sql.toString());
 
 
                 try (PreparedStatement pst = con.prepareStatement(sql.toString())) {
-                    pst.setString(1, cpf_cnpj);
+                    pst.setString(1, nome);
+                    pst.setString(2, email);
 
                     pst.execute();
                 }

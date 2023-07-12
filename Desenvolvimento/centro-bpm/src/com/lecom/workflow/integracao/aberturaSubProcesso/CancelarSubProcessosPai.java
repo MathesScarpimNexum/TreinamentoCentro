@@ -6,27 +6,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.lecom.tecnologia.db.DBUtils;
-import com.lecom.workflow.cadastros.common.util.CalculaTempoAtraso;
-import com.lecom.workflow.cadastros.common.util.CalculaTempoLimite;
 import com.lecom.workflow.cadastros.common.util.Funcoes;
-import com.lecom.workflow.cadastros.common.util.RetornaInformacoesBPM;
-import com.lecom.workflow.cadastros.rotas.AbreProcesso;
-import com.lecom.workflow.cadastros.rotas.LoginAutenticacao;
-import com.lecom.workflow.cadastros.rotas.exception.AbreProcessoException;
-import com.lecom.workflow.cadastros.rotas.exception.LoginAuthenticationException;
-import com.lecom.workflow.cadastros.rotas.util.DadosLogin;
-import com.lecom.workflow.cadastros.rotas.util.DadosProcesso;
-import com.lecom.workflow.cadastros.rotas.util.DadosProcessoAbertura;
 import com.lecom.workflow.vo.IntegracaoVO;
 
 import br.com.lecom.atos.servicos.annotation.Execution;
@@ -42,7 +27,7 @@ public class CancelarSubProcessosPai {
 	private static final String CAMINHOWF = Funcoes.getWFRootDir()+File.separator+"upload"+File.separator+"cadastros"+File.separator+"config"+File.separator;
 
 	@Execution
-	public String AbreProcesso(IntegracaoVO integracaoVO) {
+	public String CancelarSubProcessosPai(IntegracaoVO integracaoVO) {
 		try
 		{
 			logger.debug("Iniciando Integracao");
@@ -76,7 +61,7 @@ public class CancelarSubProcessosPai {
 			StringBuilder busca = new StringBuilder();
 			busca.append(" SELECT fl.COD_PROCESSO_F,p.COD_ETAPA_ATUAL,p.COD_CICLO_ATUAL  ");
 			busca.append(" FROM processo p inner join ");
-			busca.append(" tabela fl on (fl.COD_PROCESSO_F = p.COD_PROCESSO and fl.COD_ETAPA_F = p.COD_ETAPA_ATUAL and fl.COD_CICLO_F = p.COD_CICLO_ATUAL) ");
+			busca.append(" f_abertura_ti fl on (fl.COD_PROCESSO_F = p.COD_PROCESSO and fl.COD_ETAPA_F = p.COD_ETAPA_ATUAL and fl.COD_CICLO_F = p.COD_CICLO_ATUAL) ");
 			busca.append(" and p.IDE_FINALIZADO = 'A' ");
 			busca.append(" and p.COD_VERSAO = ? and fl.COD_PROCESSO_PAI = ? ");
 			try (PreparedStatement pst = conn.prepareStatement(busca.toString())) {

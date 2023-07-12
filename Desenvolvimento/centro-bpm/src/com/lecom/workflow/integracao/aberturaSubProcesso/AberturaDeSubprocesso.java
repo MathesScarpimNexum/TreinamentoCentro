@@ -30,11 +30,11 @@ import br.com.lecom.atos.servicos.annotation.IntegrationModule;
 import br.com.lecom.atos.servicos.annotation.Version;
 
 @IntegrationModule("AberturaDeSubprocesso")
-@Version({1,0,2})
+@Version({1,0,0})
 public class AberturaDeSubprocesso {
 
 
-	private static final Logger logger = LoggerFactory.getLogger(AnexosBPM.class);
+	private static final Logger logger = LoggerFactory.getLogger(AberturaDeSubprocesso.class);
 	private static final String CAMINHOWF = Funcoes.getWFRootDir()+File.separator+"upload"+File.separator+"cadastros"+File.separator+"config"+File.separator;
 
 	@Execution
@@ -44,7 +44,7 @@ public class AberturaDeSubprocesso {
 			logger.debug("Iniciando Integracao");
 			//loga ambiente
 			Map<String,String> abertura = Funcoes.getParametrosIntegracao(CAMINHOWF + "automatico");
-			Map<String,String> leituraNormativos = Funcoes.getParametrosIntegracao(CAMINHOWF + "DadosSubProcesso");
+			Map<String,String> DadosSubProcesso = Funcoes.getParametrosIntegracao(CAMINHOWF + "DadosSubProcesso");
 			String urlSSo = abertura.get("enderecoSSO");
 			String loginUsuario = abertura.get("loginUsuarioAutomatico");
 			String senhaUsuario  = abertura.get("senhaUsuarioAutomatico");
@@ -57,19 +57,29 @@ public class AberturaDeSubprocesso {
 	    	//loga user
 
 			String urlBPm = abertura.get("enderecoBPM");
-			String codigoFormulario= leituraNormativos.get("cod_form");
-			String codigoVersao = leituraNormativos.get("cod_versao");
-			String modoTeste = leituraNormativos.get("cod_versao");
+			String codigoFormulario= DadosSubProcesso.get("cod_form");
+			String codigoVersao = DadosSubProcesso.get("cod_versao");
+			String modoTeste = DadosSubProcesso.get("modo_teste");
 			
 			Map<String,String> campos = new HashMap<>();
 			@SuppressWarnings("unchecked")
 			Map<String,String> camposEtapa = integracaoVO.getMapCamposFormulario();
-			List<Map<String,Object>> valores = integracaoVO.getDadosModeloGrid("grid");
+			List<Map<String,Object>> valores = integracaoVO.getDadosModeloGrid("GD_ANEXOS");
 			//String PA = camposEtapa.get("$LST_PA_SETOR");pegar valor de campo
+			String nome = camposEtapa.get("$LT_NOME");
+			String email = camposEtapa.get("$LT_EMAIL");
 			
 			
 			List<Map<String,Object>> linhasGrid = new ArrayList<>();
 			Map<String,Object> dadosGrid;
+			for (Map<String, Object> map : valores) {
+			    
+			    dadosGrid = new HashMap<>();
+				
+				dadosGrid.put("ANX_EVIDENCIA",map.get("ANX_EVIDENCIA"));		
+				
+				linhasGrid.add(dadosGrid);	
+			}
 //			List<Map<String,Object>> valores2 = integracaoVO.getDadosModeloGrid("GD_ANEXO");
 //			for (Map<String, Object> map : valores2) {
 //			    
@@ -82,10 +92,13 @@ public class AberturaDeSubprocesso {
 //			}// passar uma grid do processo pai para o filho
 //			campos.put("LST_PA_SETOR",PA);
 			logger.debug(" campos = "+campos);
+			campos.put("LT_NOME",nome);
+			campos.put("LT_EMAIL",email);
+			campos.put("COD_PROCESSO_PAI", integracaoVO.getCodProcesso());
 			
 			
 			DadosProcesso dadosProcesso = new DadosProcesso("A");
-			dadosProcesso.geraValoresGrid("GD_ANEXO", linhasGrid);	
+			dadosProcesso.geraValoresGrid("GD_ANEXOS", linhasGrid);	
 			dadosProcesso.geraPadroes(campos);
 			//add campos form
 			
