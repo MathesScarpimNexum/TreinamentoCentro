@@ -109,7 +109,7 @@ public class RoboDiasBPM
     	logger.info("consultaProcessoEmAndamento");
     	Map<String,String> Chamado = null;
         StringBuilder query = new StringBuilder();
-        query.append("SELECT DISTINCT pe.DAT_GRAVACAO,p.COD_CICLO_ATUAL,ULTIMO_VOTO,p.COD_ETAPA_ATUAL,p.cod_processo FROM processo p INNER JOIN processo_etapa pe ON ( p.COD_PROCESSO = pe.COD_PROCESSO) inner join tabela f on (f.COD_PROCESSO_F = pe.COD_PROCESSO) where  p.COD_FORM = ? and (pe.COD_ETAPA = ?) and IDE_STATUS = 'A' and COD_VERSAO = ? order by p.COD_CICLO_ATUAL desc;");
+        query.append("SELECT DISTINCT pe.DAT_GRAVACAO,p.COD_CICLO_ATUAL,RB_VOTACAO,p.COD_ETAPA_ATUAL,p.cod_processo FROM processo p INNER JOIN processo_etapa pe ON ( p.COD_PROCESSO = pe.COD_PROCESSO) inner join f_treinamento_j f on (f.COD_PROCESSO_F = pe.COD_PROCESSO) where  p.COD_FORM = ? and (pe.COD_ETAPA = ?) and IDE_STATUS = 'A' and COD_VERSAO = ? order by p.COD_CICLO_ATUAL desc;");
  
         try (PreparedStatement pst = connBpm.prepareStatement(query.toString())) {
         	 Chamado = Funcoes.getParametrosIntegracao(CAMINHOWF + "RoboDiasBPM");
@@ -120,7 +120,7 @@ public class RoboDiasBPM
             while (rs.next()) {
                 String datGravacao = rs.getString("DAT_GRAVACAO");
                 String CICLO = rs.getString("COD_CICLO_ATUAL");
-                String UltimoVoto = rs.getString("ULTIMO_VOTO");
+                String UltimoVoto = rs.getString("RB_VOTACAO");
                 String etapa = rs.getString("COD_ETAPA_ATUAL");
                 String processo = rs.getString("cod_processo");
                 if(UltimoVoto != null || UltimoVoto != "" || UltimoVoto != " ")

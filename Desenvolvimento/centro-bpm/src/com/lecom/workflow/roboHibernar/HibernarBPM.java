@@ -44,7 +44,7 @@ public class HibernarBPM {
 	private static final Logger logger = LoggerFactory.getLogger(HibernarBPM.class);
     private static final int DIA_AVISO = 5;
     private static final int TEMPO_HIBERNACAO_DEFAULT = 36000000;
-    private static final int ETAPA = 1;
+    private static final int ETAPA = 5;
     
 
 
@@ -67,10 +67,9 @@ public class HibernarBPM {
                     for (Map<String, String> p : listProcessoPendente) {    
                     	 String milliDTGravacao = p.get("DT_SOLICITACAO").toString();
                          logger.debug("milliDTGravacao: " + milliDTGravacao);
-                         String diaVencimento = p.get("DT_EVENTO").toString();
+                         String diaVencimento = p.get("DT_CHEGADA").toString();
                         logger.debug("diaVencimento: " + diaVencimento);
-                        String prazo =  p.get("LST_PRAZO").toString() ;  
-                        Long DiasRestantes = diasRestantes(diaVencimento);;
+                        Long DiasRestantes = diasRestantes(diaVencimento);
                         logger.debug("DiasRestantes: " + DiasRestantes);
                         if(DiasRestantes > 0) {
                             dtDisparoIncluido  += alterarTempoHibernacao(conn, p, DiasRestantes);
@@ -222,17 +221,13 @@ public class HibernarBPM {
             throws SQLException {
         List<Map<String, String>> retorno = new ArrayList<>();
         StringBuilder query = new StringBuilder();
-        query.append(" SELECT ");
-        query.append("     * ");
-        query.append(" FROM PROCESSO_ETAPA pe ");
-        query.append(" INNER JOIN TABELA f ");
-        query.append(" ON pe.COD_PROCESSO = f.COD_PROCESSO_F ");
-        query.append("     AND pe.COD_ETAPA = f.COD_ETAPA_F ");
-        query.append("     AND pe.COD_CICLO = f.COD_CICLO_F ");
-        query.append(" WHERE pe.IDE_STATUS = 'H' ");
-        query.append("     AND pe.VLR_TEMP_HIBERNA = " + TEMPO_HIBERNACAO_DEFAULT); 
-        query.append("     AND pe.COD_ETAPA =  " + ETAPA);
-        query.append("  ;");
+        query.append("SELECT * from processo p");
+        query.append(" inner join f_treinamento_j f");
+        query.append(" on (p.COD_PROCESSO = f.COD_PROCESSO_F and p.COD_ETAPA_ATUAL = f.COD_ETAPA_F and p.COD_CICLO_ATUAL = f.COD_CICLO_F)");
+        query.append(" inner join processo_etapa pe ");
+        query.append(" on (p.COD_PROCESSO = pe.COD_PROCESSO and p.COD_ETAPA_ATUAL = pe.COD_ETAPA and p.COD_CICLO_ATUAL = pe.COD_CICLO)");
+        query.append(" where pe.IDE_STATUS = 'H' and p.COD_FORM = 8 and pe.VLR_TEMP_HIBERNA = 36000000");
+   
 
         try(PreparedStatement pst = conn.prepareStatement(query.toString())){
             try(ResultSet rs = pst.executeQuery()){

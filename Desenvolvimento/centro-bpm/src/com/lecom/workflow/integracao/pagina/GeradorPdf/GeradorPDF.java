@@ -479,11 +479,11 @@ public class GeradorPDF {
 		logger.debug("getUniquqIdECM fileId = "+fileId+" idTempalte = "+idTemplate );
 		DadosDocumento info = null;
 		try {
-			DadosLogin dadosLogin = new DadosLogin("adm", "lecom", false);
-			LoginAutenticacao login = new LoginAutenticacao("ambiente/sso", dadosLogin);
+			DadosLogin dadosLogin = new DadosLogin("adm", "lecomcentro", false);
+			LoginAutenticacao login = new LoginAutenticacao("https://bpm-hml.sicoobcentro.com.br/sso", dadosLogin);
 			logger.debug("login = "+login.getToken());
 			logger.debug(idTemplate);
-			DocumentosECM documentosEcm = new DocumentosECM("ambiente/ecmcore", login.getToken(), idTemplate, "0", 50);
+			DocumentosECM documentosEcm = new DocumentosECM("https://bpm-hml.sicoobcentro.com.br/ecmcore", login.getToken(), idTemplate, "0", 50);
 			List<DadosDocumento> dados;
 			dados = documentosEcm.getDocumentosByTemplate();
 			logger.debug("dados = "+dados.size());

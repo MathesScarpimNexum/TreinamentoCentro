@@ -58,15 +58,15 @@ public class RoboAlteraSlaBPM implements WebServices {
 		try (Connection con = DBUtils.getConnection("workflow")) {
 			StringBuilder verificaSlaQuery = new StringBuilder();
 			verificaSlaQuery.append(
-					"SELECT DISTINCT pe.cod_processo, pe.cod_etapa, pe.cod_ciclo, pe.dat_gravacao, pe.dat_limite, pe.dat_finalizacao, pe.vlr_tempo_alerta, pe.vlr_atraso1, f.campo");
+					"SELECT DISTINCT pe.cod_processo, pe.cod_etapa, pe.cod_ciclo, pe.dat_gravacao, pe.dat_limite, pe.dat_finalizacao, pe.vlr_tempo_alerta, pe.vlr_atraso1, f.LST_RISCO");
 			verificaSlaQuery.append("	FROM PROCESSO_ETAPA PE");
 			verificaSlaQuery.append("		INNER JOIN PROCESSO P ON ( P.COD_PROCESSO = PE.COD_PROCESSO )");
 			verificaSlaQuery.append(
 					"		INNER JOIN ETAPA E ON ( E.COD_FORM = P.COD_FORM AND E.COD_VERSAO = P.COD_VERSAO AND E.COD_ETAPA = PE.COD_ETAPA )");
-			verificaSlaQuery.append("		INNER JOIN tabela F on ( P.COD_PROCESSO = F.COD_PROCESSO_F )");
+			verificaSlaQuery.append("		INNER JOIN f_treinamento_j F on ( P.COD_PROCESSO = F.COD_PROCESSO_F )");
 			verificaSlaQuery.append("			WHERE PE.IDE_STATUS = 'A'");
-			verificaSlaQuery.append("				AND P.COD_FORM = 16");
-			verificaSlaQuery.append("				AND PE.COD_ETAPA IN (5, 3);");
+			verificaSlaQuery.append("				AND P.COD_FORM = 8");
+			verificaSlaQuery.append("				AND PE.COD_ETAPA IN (4);");
 
 			// recupera o turno semanal que est� cadastrado no BPM
 			turnoSemanaMap = retornaDadosBaseBPM.getTurnoSemanaMapBanco(con);
@@ -82,41 +82,27 @@ public class RoboAlteraSlaBPM implements WebServices {
 					while (rs.next()) {
 
 						logger.debug(":::::: RETORNO DE DADOS DO PROCESSO ::::::");
-						String tipoChamado = rs.getString("rb_nivel_prioridade");
+						String tipoChamado = rs.getString("LST_RISCO");
 						String codProcesso = rs.getString("cod_processo");
 						String codEtapa = rs.getString("cod_etapa");
 						String codCiclo = rs.getString("cod_ciclo");
 						Timestamp dataGravacaoEtapaAtual = rs.getTimestamp("dat_gravacao");
 
-						if (tipoChamado.equals("op1")) {
+						if (tipoChamado.equals("Alto")) {
 							// Calcula o tempo de atraso da etapa
 							dataGravacaoEtapa.setTimeInMillis(dataGravacaoEtapaAtual.getTime());
 							dataLimite = new CalculaTempoLimite(dataGravacaoEtapa, 0l, turnoSemanaMap,
-									diasNaoTrabalhadosList).getCalculaTempoAtrasoSegundos(Long.parseLong("24"), "H");
+									diasNaoTrabalhadosList).getCalculaTempoAtrasoSegundos(Long.parseLong("2"), "H");
 							atraso1 = new CalculaTempoAtraso(dataLimite, dataGravacaoEtapa, turnoSemanaMap,
 									diasNaoTrabalhadosList).getTotalEmMilisegundos();
 
 							// Calcula o tempo de alerta da etapa
 							dataGravacaoEtapa.setTimeInMillis(dataGravacaoEtapaAtual.getTime());
 							dataAlerta = new CalculaTempoLimite(dataGravacaoEtapa, 0l, turnoSemanaMap,
-									diasNaoTrabalhadosList).getCalculaTempoAtrasoSegundos(Long.parseLong("12"), "H");
+									diasNaoTrabalhadosList).getCalculaTempoAtrasoSegundos(Long.parseLong("1"), "H");
 							alerta1 = new CalculaTempoAtraso(dataAlerta, dataGravacaoEtapa, turnoSemanaMap,
 									diasNaoTrabalhadosList).getTotalEmMilisegundos();
-						} else if (tipoChamado.equals("op2")) {
-							// Calcula o tempo de atraso da etapa
-							dataGravacaoEtapa.setTimeInMillis(dataGravacaoEtapaAtual.getTime());
-							dataLimite = new CalculaTempoLimite(dataGravacaoEtapa, 0l, turnoSemanaMap,
-									diasNaoTrabalhadosList).getCalculaTempoAtrasoSegundos(Long.parseLong("6"), "H");
-							atraso1 = new CalculaTempoAtraso(dataLimite, dataGravacaoEtapa, turnoSemanaMap,
-									diasNaoTrabalhadosList).getTotalEmMilisegundos();
-
-							// Calcula o tempo de alerta da etapa
-							dataGravacaoEtapa.setTimeInMillis(dataGravacaoEtapaAtual.getTime());
-							dataAlerta = new CalculaTempoLimite(dataGravacaoEtapa, 0l, turnoSemanaMap,
-									diasNaoTrabalhadosList).getCalculaTempoAtrasoSegundos(Long.parseLong("4"), "H");
-							alerta1 = new CalculaTempoAtraso(dataAlerta, dataGravacaoEtapa, turnoSemanaMap,
-									diasNaoTrabalhadosList).getTotalEmMilisegundos();
-						} else {
+						} else if (tipoChamado.equals("Baixo")) {
 							// Calcula o tempo de atraso da etapa
 							dataGravacaoEtapa.setTimeInMillis(dataGravacaoEtapaAtual.getTime());
 							dataLimite = new CalculaTempoLimite(dataGravacaoEtapa, 0l, turnoSemanaMap,

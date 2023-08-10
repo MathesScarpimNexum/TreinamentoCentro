@@ -22,7 +22,6 @@ import com.lecom.workflow.cadastros.rotas.exception.LoginAuthenticationException
 import com.lecom.workflow.cadastros.rotas.util.DadosLogin;
 import com.lecom.workflow.cadastros.rotas.util.DadosProcesso;
 import com.lecom.workflow.cadastros.rotas.util.DadosProcessoAbertura;
-import com.lecom.workflow.integracao.campo.PreencheDados.AnexosBPM;
 import com.lecom.workflow.vo.IntegracaoVO;
 
 import br.com.lecom.atos.servicos.annotation.Execution;
